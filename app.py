@@ -9,7 +9,7 @@ def home():
 
 @app.route('/agenda', methods=['GET', 'POST'])
 def agenda():
-    tarefa = None
+    tarefas = None
 
     if request.method == 'POST':
         titulo_tarefa = request.form['titulo-tarefa']
@@ -17,7 +17,13 @@ def agenda():
         tarefa = Tarefa(titulo_tarefa, data_conclusao)
         tarefa.salvar_tarefa()
 
-    return render_template('agenda.html', titulo='agenda', tarefa=tarefa)
+    tarefas = Tarefa.obter_tarefas()
+    return render_template('agenda.html', titulo='agenda', tarefa=tarefas)
+
+@app.route('/delite/<int:idTarefa>')
+def delete(idTarefa):
+    tarefa = Tarefa,id(idTarefa)
+    tarefa.excluir_tarefa()
 
 @app.route('/ola')
 def ola_mundo():
