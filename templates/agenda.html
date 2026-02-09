@@ -1,42 +1,49 @@
-{% extends "base.html" %}
+AA{% extends "base.html" %}
 
 {% block content %}
-<form method="POST">
-    <div class="mb-3">
-        <label for="titulo-tarefa" class="form-label">Titulo da tarefa
-        </label>
-        <input type="email" class="form-control" name="titulo-tarefa" id="titulo-tarefa" aria-describedby="emailHelp">
-        <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
-        </div>
-    <input type="text" name="titulo-tarefa"
-           id="titulo-tarefa" placeholder="Título da tarefa"
-           required>
+ 
+<div class="container-principal">
+ 
+    <h1 class="titulo">Agenda</h1>
+ 
+    <form method="POST">
+<input type="text" name="titulo-tarefa" class="input-bonito" 
 
-    <input type="date" name="data-conclusao"                                                                                                                                                                                     
-           id="data-conclusao">
+              placeholder="Digite a tarefa..." value="{{tarefa_selecionada.titulo_tarefa if 
 
-    <button type="submit">Adicionar</button>
-</form>
-<h2>Lista de tarefas</h2>
-{% if tarefa %}
-<div class="tarefa">
-    <span class="titulo">{{ tarefa.titulo_tarefa }}</span>
-    <span class="data">{{ tarefa.data_conclusao }}</span>
-</div>
-{% endif %}
+                tarefa_selecionada else ''}}"required>
+<input type="date" name="data-conclusao" class="input-bonito" value="{{tarefa_selecionada.data_conclusao if 
+
+                tarefa_selecionada else ''}}"required>>
+ 
+ 
+        <button type="submit" class="btn-adicionar">Salvar</button>
+ 
+        {% if tarefa_selecionada %}
+<a href="{{url_for ('agenda') }}" class=" btn btn-secondary"> Cancelar </a> 
+
+        {% endif %}
+ 
+    </form>
+<h2>Lista de Tarefas</h2>
+
+        {% if tarefas %}
+<ul>
+
+            {% for tarefa in tarefas %}
+<li>{{ tarefa.titulo_tarefa }} - {{ tarefa.data_conclusao }} 
+<a href="{{url_for ('delete', idTarefa=tarefa.id_tarefa) }}"> 🐭 Apagar </a> 
+<a href="{{url_for ('update', idTarefa=tarefa.id_tarefa) }}"> 👌Editar </a></li>
+ 
+              <!-- Controle para editar -->
+
+            {% endfor %}
+</ul>
+
+        {% else %}
+<p>Nenhuma tarefa cadastrada.</p>
+
+        {% endif %}
+ 
 {% endblock %}
-
-
-<!-- metodos HTML:
- GET -> "pega" (pega/obtem) as informaçoes
- POST -> "envia" (cadastrar/inclui/adiciona) as informacoes
- UPDATE/PATHC -> "atualiza" as informaçoes
- DELETE -> "apaga" as informaçoes
- CROUD -> create, read, update, delete-->
-
- <!-- codigo de retorno:
-    2xx - sucesso
-    3xx - sucesso, mas redirecionado
-    4xx - nao encontrado (falha na REQUISIÇAO)
-    5xx - erro do servidor (falha na RESPOSTA)
-    -->
+ 
