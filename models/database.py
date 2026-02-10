@@ -1,10 +1,25 @@
 from sqlite3 import Connection, connect, Cursor
 from typing import Any, Optional, Self, Type
 from types import TracebackType
+from dotenv import load_dotenv
 import traceback
- 
+import os
+
+load_dotenv() #procura arquvi .env com variaveis
+DB_PATH = os.getenv('DATABASE', './data/tarefas.sqlite3' )
+
+def init_db(db_name: str = DB_PATH) -> None:
+    with connect(db_name) as conn:
+        conn.execute("""CREATE TABLE IF NOT EXISTS tarefas (
+                        id INTERGER PRIMARY KEY AUTOINCREMENT, 
+                     titulo_tarefa TEXT NOT NULL,
+                     data_conclusao TEXT
+                     );
+                     
+                     """)
+
 class Database:
-    def __init__(self, db_name: str) -> None:
+    def __init__(self, db_name: str = DB_PATH) -> None:
         self.connection: Connection = connect(db_name)
         self.cursor: Cursor = self.connection.cursor()
         self.executar("""
@@ -47,20 +62,4 @@ class Database:
             traceback.print_tb(tb)
  
         self.close()
- 
- 
-# Área de Testes
-# try:
-#     db = Database('./data/tarefas.sqlite3')
-#     db.executar('''
-#     CREATE TABLE IF NOT EXISTS tarefas (
-#         id INTEGER PRIMARY KEY AUTOINCREMENT,
-#         titulo_tarefa TEXT NOT NULL,
-#         data_conclusao TEXT);
-#     ''')
-#     db.executar(" INSERT INTO tarefas (titulo_tarefa, data_conclusao) VALUES (?, ?);", ("Estudar Python", "2026-01-29"))
-# except Exception as e:
-#     print(f"Erro ao criar tabela: {e}")
-# finally:
-#     db.close()
  
