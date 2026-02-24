@@ -8,9 +8,11 @@
         <input type="text" name="titulo-tarefa" class="input-bonito" placeholder="Digite a tarefa..." 
                value="{% if tarefa_selecionada %}{{ tarefa_selecionada.titulo_tarefa }}{% endif %}" required>
         
+            <!-- campo para escolher a data -->
         <input type="date" name="data-conclusao" class="input-bonito" 
                value="{% if tarefa_selecionada %}{{ tarefa_selecionada.data_conclusao }}{% endif %}" required>
 
+        <!-- botão muda o texto dependendo se está editando ou criando -->
         <button type="submit" class="btn-adicionar">
             {% if tarefa_selecionada %} Atualizar {% else %} Salvar {% endif %}
         </button>
@@ -29,6 +31,8 @@
                 </span>
                 <br>
                 <small style="color: #999;">
+
+                     <!-- mostra data de conclusão ou prazo -->
                     {% if tarefa.concluida == 1 %}
                         ✔️ {{ tarefa.data_hora_conclusao }}
                     {% else %}
@@ -51,9 +55,11 @@
 </div>
 
 <script>
+
+    // função para mudar o status da tarefa
     function mudarStatus(id) {
         fetch('/status/' + id, { method: 'POST' })
-        .then(() => window.location.reload());
+        .then(() => window.location.reload()); // recarrega a página depois
     }
 </script>
 {% endblock %}
